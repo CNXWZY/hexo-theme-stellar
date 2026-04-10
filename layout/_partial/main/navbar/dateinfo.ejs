@@ -2,7 +2,7 @@
 function layoutDiv() {
   // 作者
   var el = ''
-  el += `<div class="flex-row" id="post-meta">`
+  el += `<div class="flex-row post-meta">`
   if (page.wiki) {
     el += `<span class="text created">${__("meta.updated") + __("symbol.colon")}`
     el += `<time datetime="${date_xml(page.updated)}">${date(page.updated, config.date_format)}</time>`

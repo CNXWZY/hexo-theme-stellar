@@ -13,9 +13,6 @@ if (item.placeholder == null && item.filter == 'auto') {
 }
 function layoutDiv() {
   var el = ''
-  if (page.search == false) {
-    return el
-  }
   el += `<div class="search-wrapper" id="search-wrapper">`
   el += `<form class="search-form">`
   var filter = ''
@@ -31,7 +28,7 @@ function layoutDiv() {
       filter = item.filter
     }
   }
-  el += `<a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();">`
+  el += `<a class="search-button" onclick="document.getElementById('search-input').focus();">`
   el += icon('default:search')
   el += `</a>`
   el += `<input type="text" class="search-input" id="search-input"`

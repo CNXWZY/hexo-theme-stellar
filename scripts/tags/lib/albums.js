@@ -31,7 +31,7 @@ module.exports = ctx => function(args) {
       if (item?.url) {
         el += `<div class="grid-cell album-card">`
         el += `<a class="card-link lazy-box" target="_blank" rel="external nofollow noopener noreferrer" href="${item.url}">`
-        el += `<img class="lazy" data-src="${item.cover || item.icon || item.avatar || ctx.theme.config.default.cover}" onerror="javascript:this.removeAttribute(&quot;data-src&quot;);this.src=&quot;${ctx.theme.config.default.cover}&quot;;"/>`
+        el += `<img class="lazy" data-src="${item.cover || item.icon || item.avatar || ctx.theme.config.default.cover}" onerror="javascript:this.removeAttribute('data-src');this.src='${ctx.theme.config.default.cover}';"/>`
         el += `<div class="lazy-icon" style="background-image:url(${ctx.theme.config.default.loading});"></div>`
         el += `<div class="image-meta">`
         if (item.title) {

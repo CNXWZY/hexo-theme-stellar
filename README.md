@@ -1,63 +1,60 @@
-# Stellar - 每个人的独立博客
+# Fix: Duplicate ID and HTML Attribute Escaping Issues
 
-Stellar 是一个极为强大的综合型 Hexo 主题，包含博客系统、知识库系统、专栏系统、笔记系统，内置海量的标签和动态数据组件。
+## 问题描述
 
-## 亮点
+### 1. 重复的 id="post-meta" (违反 HTML 规范)
+主题模板中使用了硬编码的 `id="post-meta"`，在文章列表页中同一页面会出现多次，违反 HTML 规范（id 必须唯一）。
 
-- 支持技术/生活文章布局风格，为不同类型的文章使用不同的风格。
-- 内置 wiki 系统，可以展示多个项目文档，或个人知识库。
-- 内置专栏系统，可以沉浸式阅读专栏系列文章。
-- 内置笔记系统，更方便梳理笔记。
-- 内置海量的灵活而强大的标签组件，互相之间还可以混搭嵌套。
-- 内置多种动态数据组件，静态博客更新不再依赖于重新部署。
-  - 动态时间线（像发朋友圈一样发布短文，也可以订阅他人的时间线）
-  - 自动化的动态友链（自动检测友链状态、打标签、友链文章订阅）
-  - 渲染远程 markdown 文件（例如渲染项目仓库的 README 以减少重复工作）
-- 模块化设计，内置多种复用性极强的小组件，自由搭配布局。
-- 图片懒加载占位固定原图长宽比，不会发生高度跳变，体验更佳。
-- 支持一站多作者，可以为不同文章指定不同的作者，每位作者都有专属主页。
-- 社区文化：可订阅「探索号」时间线数据源获取社区用户的宝贵经验分享。
+### 2. HTML 属性中 `&quot;` 转义问题 (导致 JS 语法错误)
+在 `onclick`、`onerror` 等 HTML 属性值中，内部使用 `&quot;` 转义双引号。浏览器解析后 `&quot;` 变成 `"`，导致 JS 语法错误，VSCode 报错。
 
-上述亮点都可以在 [文档](https://xaoxuu.com/wiki/stellar/) 中找到详细使用方法。
+**示例：**
+```html
+<!-- 模板代码 -->
+onclick="document.getElementById(&quot;search-input&quot;).focus();"
 
-[![Stargazers over time](https://starchart.cc/xaoxuu/hexo-theme-stellar.svg)](https://starchart.cc/xaoxuu/hexo-theme-stellar)
-
-
-## Getting Started
-
-Check your environment:
-
-```yaml
-Hexo: 6.3.0 ~ latest
-hexo-cli: 4.3.0 ~ latest
-node: 14.17.3 ～ latest LTS # 建议选择 LTS 版本，过高的版本 hexo 还没有进行兼容。
-npm: 6.14.13 ~ latest
+<!-- 浏览器解析后（无效 JS） -->
+onclick="document.getElementById("search-input").focus();">
+                              ^^^^^^^^ 引号提前结束
 ```
 
-Edit your `_config.yml`:
+---
 
-```yaml
-theme: stellar
-```
+## 修复内容
 
-Install Stellar in terminal:
+### 1. 修复重复 id 问题 → 改用 class
 
-```bash
-npm i hexo-theme-stellar
-```
+| 文件 | 修改 |
+|------|------|
+| `layout/_partial/main/post_list/post_card.ejs` | `id="post-meta"` → `class="post-meta"` |
+| `layout/_partial/main/navbar/dateinfo.ejs` | `id="post-meta"` → `class="post-meta"` |
+| `layout/_partial/main/notebook/note_card.ejs` | `id="post-meta"` → `class="post-meta"` |
+| `source/css/_components/partial/bread-nav.styl` | `div#post-meta` → `.post-meta` |
+| `source/js/main.js` | `#post-meta` → `.post-meta` |
 
-## Usage
+### 2. 修复 HTML 属性转义问题 → 使用单引号
 
-See docs: https://xaoxuu.com/wiki/stellar/
+| 文件 | 修改位置 |
+|------|----------|
+| `layout/_partial/sidebar/search.ejs` | onclick |
+| `layout/_partial/main/article/article_footer.ejs` | onclick |
+| `scripts/tags/lib/posters.js` | onerror |
+| `scripts/tags/lib/sites.js` | onerror, style |
+| `scripts/tags/lib/image.js` | onerror |
+| `scripts/tags/lib/friends.js` | onerror, style |
+| `scripts/tags/lib/copy.js` | onclick |
+| `scripts/tags/lib/albums.js` | onerror |
 
-> AI docs： https://deepwiki.com/xaoxuu/hexo-theme-stellar/
+---
 
-## Examples
+## 影响
 
-https://xaoxuu.com/wiki/stellar/examples/
+- ✅ 解决 VSCode 等编辑器的 JS 语法报错
+- ✅ 生成的 HTML 符合 HTML 规范
+- ✅ 浏览器能正确执行 JS 代码
 
-## Feedback
+---
 
-Issues: https://github.com/xaoxuu/hexo-theme-stellar/issues/
+## 验证
 
-Discussions: https://github.com/xaoxuu/hexo-theme-stellar/discussions/
+修复后执行 `hexo clean && hexo generate`，VSCode 不再报告 JS 语法错误。

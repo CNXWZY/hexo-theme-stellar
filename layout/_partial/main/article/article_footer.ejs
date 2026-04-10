@@ -107,7 +107,7 @@ function layoutDiv() {
             el += ' target="_blank" rel="external nofollow noopener noreferrer"';
           }
           if (item == 'wechat') {
-            el += ' onclick="util.toggle(&quot;qrcode-wechat&quot;)"';
+            el += ' onclick=\'util.toggle("qrcode-wechat")\'';
           } else if (item == 'weibo') {
             el += ' href="https://service.weibo.com/share/share.php?url=' + page.permalink;
             el += '&title=' + page.title + ' - ' + config.title;
@@ -122,7 +122,7 @@ function layoutDiv() {
             el += ' href="mailto:?subject=' + page.title + ' - ' + config.title + '&amp;'
             el += 'body=' + page.permalink + '"';
           } else if (item == 'link') {
-            el += ' onclick="util.copy(&quot;copy-link&quot;, &quot;' + __('message.copied') + '&quot;)"';
+            el += ' onclick=\'util.copy("copy-link", "' + __('message.copied') + '")\'';
           }
           el += '>';
           el += icon(`share:${item}`)

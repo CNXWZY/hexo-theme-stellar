@@ -21,7 +21,7 @@
     <% if (note.pin) { %>
       <span class="pin"><%- icon('solar:pin-linear') %></span>
     <% } %>
-    <span class="cap" id="post-meta">
+    <span class="cap post-meta">
       <%- icon('default:calendar') %>
       <time datetime="<%= date_xml(note.updated || note.date) %>"><%= date(note.updated || note.date, config.date_format) %></time>
     </span>

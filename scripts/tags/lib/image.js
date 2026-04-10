@@ -51,7 +51,7 @@ module.exports = ctx => function(args) {
     if (style.length > 0 && !args.ratio) {
       img += ' style="' + style + '"'
     }
-    img += `onerror="this.src=&quot;${ctx.theme.config.default.image_onerror}&quot;"`
+    img += `onerror="this.src='${ctx.theme.config.default.image_onerror}'"`
     img += '/>'
     // loading
     img += `<div class="lazy-icon" style="background-image:url(${ctx.theme.config.default.loading});"></div>`
