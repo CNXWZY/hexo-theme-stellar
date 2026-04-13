@@ -265,3 +265,9 @@ init.sidebar()
 init.relativeDate(document.querySelectorAll('.post-meta time'))
 init.registerTabsTag()
 init.canonicalCheck()
+
+// Listen for PJAX navigation complete
+document.addEventListener('pjax:complete', function () {
+  init.relativeDate(document.querySelectorAll('.post-meta time'))
+  init.registerTabsTag()
+})
